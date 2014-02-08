@@ -5166,7 +5166,7 @@ sub get_verpids {
 			main::logger "INFO: Using Live TV: $verpid\n" if $opt->{verbose} && $verpid;
 
 		# Live/Non-live EMP tv/radio XML URL
-		} elsif ( $prog->{pid} =~ /^http/i && $url =~ /^http.+xml$/ ) {
+		} elsif ( $prog->{pid} =~ /^http/i && $url =~ /^http/ ) {
 			$version = 'default';
 			$verpid = $url;
 			main::logger "INFO: Using Live/Non-live EMP tv/radio XML URL: $verpid\n" if $opt->{verbose} && $verpid;
@@ -6618,13 +6618,13 @@ sub clean_pid {
 		$prog->{pid} = $1;
 
 	# If this an URL containing a PID (except for BBC programmes URLs)
-	} elsif ( $prog->{pid} =~ m{^http.+\/([pb]0[a-z0-9]{6})\/?.*$} && $prog->{pid} !~ m{/programmes/} ) {
+	} elsif ( $prog->{pid} =~ m{^http.+\/([pb]0[a-z0-9]{6})\/?.*$} && $prog->{pid} !~ m{/programmes/} && $prog->{pid} !~ m{/playlist/}) {
 		# extract b??????? format from any URL containing it
 		$prog->{pid} = $1;
 
 	# If this is a BBC *iPlayer* Live channel
 	# e.g. http://www.bbc.co.uk/iplayer/playlive/bbc_radio_fourfm/
-	} elsif ( $prog->{pid} =~ m{http.+bbc\.co\.uk/iplayer}i ) {
+	} elsif ( $prog->{pid} =~ m{http.+bbc\.co\.uk/iplayer}i && $prog->{pid} !~ m{/playlist/} ) {
 		# Remove trailing path for URLs like 'http://www.bbc.co.uk/iplayer/radio/bbc_radio_fourfm/listenlive'
 		$prog->{pid} =~ s/\/\w+live\/?$//;
 		# Remove extra URL path for URLs like 'http://www.bbc.co.uk/iplayer/playlive/bbc_one_london/' or 'http://www.bbc.co.uk/iplayer/tv/bbc_one'
